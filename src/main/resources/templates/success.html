@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>成功</title>
+</head>
+<body>
+    <h2>成功！</h2>
+    <!--html代码经过模板引擎解析后不会显示，而是显示符合 thymeleaf 格式的代码-->
+    <div th:text="${msg}">这里是html代码</div>
+    <hr>
+    <!--不会转义特殊字符-->
+    <div th:text="${msg}"></div>
+    <!--会转义特殊字符-->
+    <div th:utext="${msg}"></div>
+    <hr>
+    <!--th:each 每次遍历都会生成当前html标签-->
+    <h4 th:text="${user}" th:each="user:${users}"></h4>
+    <hr>
+    <h4>
+        <span th:each="user:${users}"> [[${user}]] </span>
+    </h4>
+</body>
+</html>
