@@ -68,7 +68,7 @@ public class Employee {
         this.email = email;
         this.gender = gender;
         this.department = department;
-        this.birth = new Date();
+        this.birth = new Date();        // 设置当前时间为员工生日
     }
 
     public Employee() {

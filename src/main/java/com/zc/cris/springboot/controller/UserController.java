@@ -2,8 +2,8 @@ package com.zc.cris.springboot.controller;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import sun.awt.SunHints;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
@@ -20,7 +20,7 @@ public class UserController {
     public String login(@RequestParam("username") String userName,
                         @RequestParam("password") String password,
                         Map<String, Object> map, HttpSession session) {
-        if (StringUtils.isNotEmpty(userName) && StringUtils.equals("123456", password)) {
+        if (StringUtils.isNotEmpty(userName) && StringUtils.equals("123", password)) {
             // 登录成功，将登录信息保存到session 中，然后使用重定向，映射规则定义在我们的自定义mvc配置类中
             session.setAttribute("loginUser", userName);
             return "redirect:/main";

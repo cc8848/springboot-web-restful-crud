@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<title>Dashboard Template for Bootstrap</title>
+		<!-- Bootstrap core CSS -->
+		<link href="asserts/css/bootstrap.min.css" rel="stylesheet">
+
+		<!-- Custom styles for this template -->
+		<link href="asserts/css/dashboard.css" rel="stylesheet">
+		<style type="text/css">
+			/* Chart.js */
+			
+			@-webkit-keyframes chartjs-render-animation {
+				from {
+					opacity: 0.99
+				}
+				to {
+					opacity: 1
+				}
+			}
+			
+			@keyframes chartjs-render-animation {
+				from {
+					opacity: 0.99
+				}
+				to {
+					opacity: 1
+				}
+			}
+			
+			.chartjs-render-monitor {
+				-webkit-animation: chartjs-render-animation 0.001s;
+				animation: chartjs-render-animation 0.001s;
+			}
+		</style>
+	</head>
+
+	<body>
+    <!--引入页面的公共部分 topbar 顶部栏-->
+    <div th:replace="common/bar::topbar"></div>
+
+		<div class="container-fluid">
+			<div class="row">
+                <!--第二种方式引入页面的公共部分，使用选择器，sidebar 侧边栏-->
+                <div th:replace="common/bar::#sidebar(activeUrl = 'emps')"></div>
+
+				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                    <!--get请求去到添加员工页面-->
+                    <h2><a class="btn btn-sm btn-success" href="emp" th:href="@{/emp}">添加员工</a></h2>
+					<div class="table-responsive">
+						<table class="table table-striped table-sm">
+							<thead>
+								<tr>
+									<th>#</th>
+                                    <th>lastName</th>
+                                    <th>email</th>
+                                    <th>gender</th>
+                                    <th>department</th>
+                                    <th>birth</th>
+                                    <th>operation</th>
+								</tr>
+							</thead>
+							<tbody>
+                            <tr th:each="emp:${emps}">
+                                <td th:text="${emp.id}"></td>
+                                <!--行内写法-->
+                                <td>[[${emp.lastName}]]</td>
+                                <td th:text="${emp.email}"></td>
+                                <td th:text="${emp.gender}==0?'女':'男'"></td>
+                                <td th:text="${emp.department.departmentName}"></td>
+                                <td th:text="${#dates.format(emp.birth, 'yyyy-MM-dd')}"></td>
+                                <td>
+                                    <!--修改和删除员工需要带上对应的员工id-->
+                                    <a class="btn btn-sm btn-primary" th:href="@{/emp/}+${emp.id}">修改</a>
+                                    <!--为每一个删除按钮设置一个deleteUri属性，用于设置表单的delete方法提交路径-->
+                                    <button class="btn btn-sm btn-danger deleteBtn"
+                                            th:attr="deleteUri=@{/emp/}+${emp.id}" style="color: white">删除
+                                    </button>
+                                </td>
+
+
+                            </tr>
+
+                            </tbody>
+						</table>
+					</div>
+				</main>
+                <!--注意：即便是delete请求，也是需要将form 表单的method属性修改为post请求为前提-->
+                <form id="deleteEmpForm" method="post">
+                    <input type="hidden" name="_method" value="delete">
+                </form>
+			</div>
+		</div>
+
+		<!-- Bootstrap core JavaScript
+    ================================================== -->
+		<!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/javascript" src="asserts/js/jquery-3.2.1.slim.min.js"
+            th:src="@{/asserts/js/jquery-3.2.1.slim.min.js}"></script>
+    <script type="text/javascript" src="asserts/js/popper.min.js" th:src="@{/asserts/js/popper.min.js}"></script>
+    <script type="text/javascript" src="asserts/js/bootstrap.min.js" th:src="@{/asserts/js/bootstrap.min.js}"></script>
+
+		<!-- Icons -->
+    <script type="text/javascript" src="asserts/js/feather.min.js" th:src="@{/asserts/js/feather.min.js}"></script>
+		<script>
+			feather.replace()
+		</script>
+
+		<!-- Graphs -->
+    <script type="text/javascript" src="asserts/js/Chart.min.js" th:src="@{/asserts/js/Chart.min.js}"></script>
+		<script>
+			var ctx = document.getElementById("myChart");
+			var myChart = new Chart(ctx, {
+				type: 'line',
+				data: {
+					labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+					datasets: [{
+						data: [15339, 21345, 18483, 24003, 23489, 24092, 12034],
+						lineTension: 0,
+						backgroundColor: 'transparent',
+						borderColor: '#007bff',
+						borderWidth: 4,
+						pointBackgroundColor: '#007bff'
+					}]
+				},
+				options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero: false
+							}
+						}]
+					},
+					legend: {
+						display: false,
+					}
+				}
+			});
+		</script>
+    <script>
+        $(".deleteBtn").click(function () {
+            // alert("cris");
+            // 通过点击按钮的方式手动提交delete 方式请求的form 表单
+            $("#deleteEmpForm").attr("action", $(this).attr("deleteUri")).submit();
+            // 取消按钮的默认行为
+            return false;
+        });
+
+    </script>
+
+	</body>
+
+</html>
